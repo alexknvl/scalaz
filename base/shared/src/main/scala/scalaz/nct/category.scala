@@ -13,8 +13,7 @@ trait CategoryInstances {
     instanceOf(new CategoryClass[Trivial, Function1] {
       def id[A: Trivial]: A => A = a => a
 
-      def compose[A: Trivial, B: Trivial, C: Trivial]
-      (bc: B => C, ab: A => B): A => C =
+      def compose[A: Trivial, B: Trivial, C: Trivial](bc: B => C, ab: A => B): A => C =
         bc compose ab
     })
 }
