@@ -27,7 +27,7 @@ trait CategoryInstances {
       override def compose[A: Trivial, B: Trivial, C: Trivial](bc: scalaz.===[B, C],
                                                                ab: scalaz.===[A, B]): scalaz.===[A, C] = bc compose ab
     })
-  
+
   implicit val subtypingCategory: Category[Trivial, <~<] =
     instanceOf(new CategoryClass[Trivial, <~<] {
       def id[A: Trivial]: A <~< A = As.refl[A]
