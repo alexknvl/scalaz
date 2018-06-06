@@ -1,6 +1,7 @@
 package scalaz
 package nct
 
+import data.As
 import scala.Function1
 
 trait CategoryClass[Obj[_], Arr[_, _]] {
@@ -14,6 +15,14 @@ trait CategoryInstances {
       def id[A: Trivial]: A => A = a => a
 
       def compose[A: Trivial, B: Trivial, C: Trivial](bc: B => C, ab: A => B): A => C =
+        bc compose ab
+    })
+
+  implicit val subtypingCategory: Category[Trivial, <~<] =
+    instanceOf(new CategoryClass[Trivial, Function1] {
+      def id[A: Trivial]: A <~< A = As.refl[A]
+
+      def compose[A: Trivial, B: Trivial, C: Trivial](bc: B <~< C, ab: A <~< B): A <~< C =
         bc compose ab
     })
 }
