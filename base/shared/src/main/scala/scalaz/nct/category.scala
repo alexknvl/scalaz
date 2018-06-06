@@ -2,6 +2,7 @@ package scalaz
 package nct
 
 import scalaz.types.Is
+import scalaz.types.As
 import scala.Function1
 
 trait CategoryClass[Obj[_], Arr[_, _]] {
@@ -25,5 +26,21 @@ trait CategoryInstances {
 
       override def compose[A: Trivial, B: Trivial, C: Trivial](bc: scalaz.===[B, C],
                                                                ab: scalaz.===[A, B]): scalaz.===[A, C] = bc compose ab
+    })
+  
+  implicit val subtypingCategory: Category[Trivial, <~<] =
+    instanceOf(new CategoryClass[Trivial, <~<] {
+      def id[A: Trivial]: A <~< A = As.refl[A]
+
+      def compose[A: Trivial, B: Trivial, C: Trivial](bc: B <~< C, ab: A <~< B): A <~< C =
+        bc compose ab
+    })
+
+  implicit val isoCategory: Category[Trivial, Iso] =
+    instanceOf(new CategoryClass[Trivial, Iso] {
+      def id[A: Trivial]: A Iso A = Iso.id[A]
+
+      def compose[A: Trivial, B: Trivial, C: Trivial](bc: B Iso C, ab: A Iso B): A Iso C =
+        bc compose ab
     })
 }
