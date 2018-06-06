@@ -1,6 +1,7 @@
 package scalaz
 package nct
 
+import scalaz.types.Is
 import scala.Function1
 
 trait CategoryClass[Obj[_], Arr[_, _]] {
@@ -15,5 +16,14 @@ trait CategoryInstances {
 
       def compose[A: Trivial, B: Trivial, C: Trivial](bc: B => C, ab: A => B): A => C =
         bc compose ab
+    })
+
+  implicit val equalsCategory: Category[Trivial, ===] =
+    instanceOf(new CategoryClass[Trivial, ===] {
+
+      override def id[A: Trivial]: scalaz.===[A, A] = Is[A, A]
+
+      override def compose[A: Trivial, B: Trivial, C: Trivial](bc: scalaz.===[B, C],
+                                                               ab: scalaz.===[A, B]): scalaz.===[A, C] = bc compose ab
     })
 }
