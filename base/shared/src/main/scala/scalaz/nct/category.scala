@@ -7,5 +7,12 @@ trait CategoryClass[Obj[_], Arr[_, _]] {
 }
 
 trait CategoryInstances {
+  implicit val function1Category: Category[Trivial, Function1] =
+    instanceof(new CategoryClass[Trivial, Function1] {
+      def id[A: Trivial]: A => A = a => a
 
+      def compose[A: Trivial, B: Trivial, C: Trivial]
+      (bc: B => C, ab: A => B): A => C =
+        bc compose ab
+    })
 }
