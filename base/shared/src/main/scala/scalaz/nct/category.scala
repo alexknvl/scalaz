@@ -13,8 +13,16 @@ trait CategoryInstances {
     instanceOf(new CategoryClass[Trivial, Function1] {
       def id[A: Trivial]: A => A = a => a
 
-      def compose[A: Trivial, B: Trivial, C: Trivial]
-      (bc: B => C, ab: A => B): A => C =
+      def compose[A: Trivial, B: Trivial, C: Trivial](bc: B => C, ab: A => B): A => C =
         bc compose ab
     })
+
+  implicit val isoCategory: Category[Trivial, Iso] =
+    instanceOf(new CategoryClass[Trivial, Iso] {
+      def id[A: Trivial]: A Iso A = Iso.id[A]
+
+      def compose[A: Trivial, B: Trivial, C: Trivial](bc: B Iso C, ab: A Iso B): A Iso C =
+        bc compose ab
+    })
+
 }
